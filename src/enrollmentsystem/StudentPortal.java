@@ -1,0 +1,532 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package enrollmentsystem;
+
+import java.awt.*; // uses Image
+import javax.swing.*;
+import java.sql.*; // uses Connection PreparedStatement ResultSet ResultSetMetaData DriverManager
+import java.util.*; // uses Vector
+import javax.swing.table.*; // uses DefaultTableCellRenderer, DefaultTableModel, TableModel
+
+/**
+ *
+ * @author sevhe
+ */
+public class StudentPortal extends javax.swing.JFrame {
+
+    /**
+     * Creates new form StudentPortal
+     */
+    private static final String URL = "jdbc:mysql://localhost:3306/enrollmentsystem?allowPublicKeyRetrieval=true&useSSL=false";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "@theHouseof25";
+
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rset = null;
+    int q, i, enumb, deleteItem;
+    DefaultTableModel RecordTable;
+    ResultSetMetaData rsmData;
+    Vector columnData;
+
+    public StudentPortal() {
+        initComponents();
+        imageCaller();
+        enrolleeCounter();
+        headerCenter(schedTable);
+    }
+
+    public void headerCenter(JTable table) {
+        setCellsAlignment(table, SwingConstants.CENTER);
+        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+    }
+
+    public void enrolleeCounter() {
+        try {
+            conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            ps = conn.prepareStatement("SELECT COUNT(e_num) AS count FROM enrollee WHERE e_stat = 'ENROLLED'");
+            rset = ps.executeQuery();
+            if (rset.next()) {
+                String count = rset.getString("count");
+                numVal.setText(count);
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    public String imgSetProfile(String setFile) {
+        String filename = setFile;
+        ImageIcon icon = new ImageIcon(filename);
+        Image imgScale = icon.getImage().getScaledInstance(TeacherDetailsForm.tImg.getWidth(), TeacherDetailsForm.tImg.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(imgScale);
+        TeacherDetailsForm.tImg.setIcon(scaledIcon);
+
+        return setFile;
+    }
+
+    public static void setCellsAlignment(JTable table, int alignment) {
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(alignment);
+
+        TableModel tableModel = table.getModel();
+
+        for (int columnIndex = 0; columnIndex < tableModel.getColumnCount(); columnIndex++) {
+            table.getColumnModel().getColumn(columnIndex).setCellRenderer(rightRenderer);
+        }
+    }
+
+    public void imageScale(String link, JLabel label) {
+        ImageIcon iconLOGO1 = new ImageIcon("C:/Users/daxxtropezz/Documents/NetBeansProjects/EnrollmentSystem/src/enrollmentsystem" + link);
+        Image imgLOGO1 = iconLOGO1.getImage();
+        Image imgScaleLOGO1 = imgLOGO1.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon scaledIconLOGO1 = new ImageIcon(imgScaleLOGO1);
+        label.setIcon(scaledIconLOGO1);
+    }
+
+    public void imageCaller() {
+        String[] link
+                = {"/Images/jcvhsHlLogin.jpg",
+                    "/Images/newLogo.png",
+                    "/Images/LionsRoarASH.png"};
+
+        imageScale(link[1], logo);
+        imageScale(link[1], logoEN);
+        imageScale(link[2], lionBG);
+    }
+
+    public void schedule() {
+        try {
+            conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            ps = conn.prepareStatement("SELECT * FROM schedule WHERE sec_code = ?");
+
+            ps.setString(1, hiddenTable.getText());
+
+            rset = ps.executeQuery();
+            rsmData = rset.getMetaData();
+
+            q = rsmData.getColumnCount();
+
+            RecordTable = (DefaultTableModel) schedTable.getModel();
+            RecordTable.setRowCount(0);
+
+            while (rset.next()) {
+                columnData = new Vector();
+
+                for (i = 1; i <= q; i++) {
+                    columnData.add(rset.getString("s_subject"));
+                    columnData.add(rset.getString("s_day"));
+                    columnData.add(rset.getString("s_starttime"));
+                    columnData.add(rset.getString("s_endtime"));
+                    columnData.add(rset.getString("s_teacher"));
+                }
+                RecordTable.addRow(columnData);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        hiddenUserPRI = new javax.swing.JLabel();
+        NotEnrolledPanel = new javax.swing.JPanel();
+        neApology = new javax.swing.JLabel();
+        neEnrollBtn = new javax.swing.JButton();
+        logo = new javax.swing.JLabel();
+        headTitleHS = new javax.swing.JLabel();
+        headTitle = new javax.swing.JLabel();
+        menubarHOME = new javax.swing.JPanel();
+        neLogout = new javax.swing.JButton();
+        neWelcomeUser = new javax.swing.JLabel();
+        lionBG = new javax.swing.JLabel();
+        neBG = new javax.swing.JLabel();
+        EnrolledPanel = new javax.swing.JPanel();
+        schedScrollPane = new javax.swing.JScrollPane();
+        schedTable = new javax.swing.JTable();
+        schedPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        secAdv = new javax.swing.JLabel();
+        secName = new javax.swing.JLabel();
+        secSY = new javax.swing.JLabel();
+        logoEN = new javax.swing.JLabel();
+        hiddenTable = new javax.swing.JLabel();
+        headTitleHS1 = new javax.swing.JLabel();
+        headTitle1 = new javax.swing.JLabel();
+        menubarHOME1 = new javax.swing.JPanel();
+        eLogout = new javax.swing.JButton();
+        eWelcomeUser = new javax.swing.JLabel();
+        ValStudPanel = new javax.swing.JPanel();
+        titleNoS = new javax.swing.JLabel();
+        numVal = new javax.swing.JLabel();
+        lionLogoSE = new javax.swing.JLabel();
+        eBG = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        hiddenUserPRI.setForeground(new java.awt.Color(140, 0, 1));
+        getContentPane().add(hiddenUserPRI, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 90, 30));
+
+        NotEnrolledPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        neApology.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        neApology.setForeground(new java.awt.Color(255, 255, 255));
+        neApology.setText("sorry cub, but you are not enrolled yet...");
+        NotEnrolledPanel.add(neApology, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 220, -1, -1));
+
+        neEnrollBtn.setBackground(new java.awt.Color(51, 51, 51));
+        neEnrollBtn.setText("ENROLL NOW!");
+        neEnrollBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        neEnrollBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                neEnrollBtnActionPerformed(evt);
+            }
+        });
+        NotEnrolledPanel.add(neEnrollBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 260, 120, 40));
+
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enrollmentsystem/Images/newLogo.png"))); // NOI18N
+        NotEnrolledPanel.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 40, 40));
+
+        headTitleHS.setFont(new java.awt.Font("Georgia", 1, 10)); // NOI18N
+        headTitleHS.setForeground(new java.awt.Color(255, 255, 255));
+        headTitleHS.setText("HIGH SCHOOL");
+        NotEnrolledPanel.add(headTitleHS, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, -1, -1));
+
+        headTitle.setFont(new java.awt.Font("Georgia", 1, 10)); // NOI18N
+        headTitle.setForeground(new java.awt.Color(255, 255, 255));
+        headTitle.setText("JOSIAH CHRISTIAN");
+        NotEnrolledPanel.add(headTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, -1, 20));
+
+        menubarHOME.setBackground(new java.awt.Color(140, 0, 1));
+        menubarHOME.setForeground(new java.awt.Color(140, 0, 1));
+        menubarHOME.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        neLogout.setBackground(new java.awt.Color(51, 51, 51));
+        neLogout.setText("logout");
+        neLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        neLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                neLogoutActionPerformed(evt);
+            }
+        });
+        menubarHOME.add(neLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, -1, 20));
+
+        neWelcomeUser.setFont(new java.awt.Font("Georgia", 1, 11)); // NOI18N
+        neWelcomeUser.setForeground(new java.awt.Color(255, 51, 51));
+        neWelcomeUser.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        neWelcomeUser.setText("Welcome, Username!");
+        neWelcomeUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        menubarHOME.add(neWelcomeUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 210, 20));
+
+        NotEnrolledPanel.add(menubarHOME, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, 320, 40));
+
+        lionBG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enrollmentsystem/Images/LionsRoarASH.png"))); // NOI18N
+        NotEnrolledPanel.add(lionBG, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 400, 400));
+
+        neBG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enrollmentsystem/Images/newBg.jpg"))); // NOI18N
+        neBG.setText("bg");
+        neBG.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        NotEnrolledPanel.add(neBG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, -1));
+
+        getContentPane().add(NotEnrolledPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 490));
+
+        EnrolledPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        schedTable.setBackground(new java.awt.Color(255, 255, 255));
+        schedTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Subject", "Day", "Start Time", "End Time", "Teacher"
+            }
+        ));
+        schedTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                schedTableMouseClicked(evt);
+            }
+        });
+        schedScrollPane.setViewportView(schedTable);
+
+        EnrolledPanel.add(schedScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 820, 220));
+
+        schedPanel.setBackground(new java.awt.Color(140, 0, 1));
+        schedPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setFont(new java.awt.Font("Georgia", 2, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Adviser: ");
+        schedPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 60, 20));
+
+        jLabel3.setFont(new java.awt.Font("Georgia", 2, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("School Year: ");
+        schedPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 90, 20));
+
+        jLabel4.setFont(new java.awt.Font("Georgia", 2, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Section: ");
+        schedPanel.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 60, 20));
+
+        secAdv.setFont(new java.awt.Font("Georgia", 2, 14)); // NOI18N
+        secAdv.setForeground(new java.awt.Color(255, 255, 255));
+        secAdv.setText("DESCRIPTION HERE");
+        schedPanel.add(secAdv, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 170, 20));
+
+        secName.setFont(new java.awt.Font("Georgia", 2, 14)); // NOI18N
+        secName.setForeground(new java.awt.Color(255, 255, 255));
+        secName.setText("DESCRIPTION HERE");
+        schedPanel.add(secName, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 170, 20));
+
+        secSY.setFont(new java.awt.Font("Georgia", 2, 14)); // NOI18N
+        secSY.setForeground(new java.awt.Color(255, 255, 255));
+        secSY.setText("2021-2022");
+        schedPanel.add(secSY, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 170, 20));
+
+        EnrolledPanel.add(schedPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, 290, 140));
+
+        logoEN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enrollmentsystem/Images/newLogo.png"))); // NOI18N
+        EnrolledPanel.add(logoEN, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 40, 40));
+
+        hiddenTable.setFont(new java.awt.Font("Georgia", 1, 10)); // NOI18N
+        hiddenTable.setForeground(new java.awt.Color(140, 0, 1));
+        hiddenTable.setText("HIGH SCHOOL");
+        EnrolledPanel.add(hiddenTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 460, -1, -1));
+
+        headTitleHS1.setFont(new java.awt.Font("Georgia", 1, 10)); // NOI18N
+        headTitleHS1.setForeground(new java.awt.Color(255, 255, 255));
+        headTitleHS1.setText("HIGH SCHOOL");
+        EnrolledPanel.add(headTitleHS1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, -1, -1));
+
+        headTitle1.setFont(new java.awt.Font("Georgia", 1, 10)); // NOI18N
+        headTitle1.setForeground(new java.awt.Color(255, 255, 255));
+        headTitle1.setText("JOSIAH CHRISTIAN");
+        EnrolledPanel.add(headTitle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, -1, 20));
+
+        menubarHOME1.setBackground(new java.awt.Color(140, 0, 1));
+        menubarHOME1.setForeground(new java.awt.Color(140, 0, 1));
+        menubarHOME1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        eLogout.setText("logout");
+        eLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        eLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eLogoutActionPerformed(evt);
+            }
+        });
+        menubarHOME1.add(eLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, -1, 20));
+
+        eWelcomeUser.setFont(new java.awt.Font("Georgia", 1, 11)); // NOI18N
+        eWelcomeUser.setForeground(new java.awt.Color(255, 51, 51));
+        eWelcomeUser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        eWelcomeUser.setText("Welcome, Username!");
+        eWelcomeUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        menubarHOME1.add(eWelcomeUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, 20));
+
+        EnrolledPanel.add(menubarHOME1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, 320, 40));
+
+        ValStudPanel.setBackground(new java.awt.Color(140, 0, 1));
+        ValStudPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(204, 255, 0), 3, true));
+        ValStudPanel.setForeground(new java.awt.Color(140, 0, 1));
+        ValStudPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        titleNoS.setFont(new java.awt.Font("Georgia", 3, 14)); // NOI18N
+        titleNoS.setForeground(new java.awt.Color(204, 255, 0));
+        titleNoS.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titleNoS.setText("NUMBER OF STUDENTS ENROLLED: ");
+        ValStudPanel.add(titleNoS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        numVal.setFont(new java.awt.Font("Georgia", 1, 48)); // NOI18N
+        numVal.setForeground(new java.awt.Color(204, 255, 0));
+        numVal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        numVal.setText("0");
+        ValStudPanel.add(numVal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 300, -1));
+        ValStudPanel.add(lionLogoSE, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 45, 60, 50));
+
+        EnrolledPanel.add(ValStudPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 310, 300, 110));
+
+        eBG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enrollmentsystem/Images/newBg.jpg"))); // NOI18N
+        eBG.setText("bg");
+        eBG.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        EnrolledPanel.add(eBG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, -1));
+
+        getContentPane().add(EnrolledPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 490));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+private JFrame frame;
+    private void neLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_neLogoutActionPerformed
+        frame = new JFrame("LogOut!");
+        if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to logout?", "Student Portal",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            LoginForm lf = new LoginForm();
+            this.dispose();
+            LoginForm.loginPanel.setVisible(true);
+            LoginForm.registerPanel.setVisible(false);
+            lf.setVisible(true);
+            lf.pack();
+            lf.setLocationRelativeTo(null);
+        }
+    }//GEN-LAST:event_neLogoutActionPerformed
+
+    private void neEnrollBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_neEnrollBtnActionPerformed
+        EnrollmentForm ef = new EnrollmentForm();
+        EnrollmentForm.hiddenPRI.setText(StudentPortal.hiddenUserPRI.getText());
+        ef.setVisible(true);
+        ef.pack();
+        ef.setLocationRelativeTo(null);
+    }//GEN-LAST:event_neEnrollBtnActionPerformed
+
+    private void eLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eLogoutActionPerformed
+        frame = new JFrame("LogOut!");
+        if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to logout?", "Student Portal",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            LoginForm lf = new LoginForm();
+            this.dispose();
+            LoginForm.loginPanel.setVisible(true);
+            LoginForm.registerPanel.setVisible(false);
+            lf.setVisible(true);
+            lf.pack();
+            lf.setLocationRelativeTo(null);
+        }
+    }//GEN-LAST:event_eLogoutActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        schedule();
+    }//GEN-LAST:event_formWindowActivated
+
+    private void schedTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_schedTableMouseClicked
+        RecordTable = (DefaultTableModel) schedTable.getModel();
+        int SelectedRows = schedTable.getSelectedRow();
+
+        TeacherDetailsForm tdf = new TeacherDetailsForm();
+
+        String TeachName = (RecordTable.getValueAt(SelectedRows, 4).toString());
+        TeacherDetailsForm.tName.setText(RecordTable.getValueAt(SelectedRows, 4).toString());
+
+        try {
+            conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            ps = conn.prepareStatement("SELECT * FROM teacher WHERE t_name = ?");
+
+            ps.setString(1, TeachName);
+
+            rset = ps.executeQuery();
+
+            if (rset.next()) {
+                String image = rset.getString("t_img");
+                String email = rset.getString("t_email");
+                String contact = rset.getString("t_contact");
+                String sex = rset.getString("t_sex");
+                String bdate = rset.getString("t_bdate");
+
+                TeacherDetailsForm.tMail.setText(email);
+                TeacherDetailsForm.tContact.setText(contact);
+                TeacherDetailsForm.tSex.setText(sex);
+                TeacherDetailsForm.tBDate.setText(bdate);
+                imgSetProfile(image);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+        tdf.setVisible(true);
+        tdf.setLocationRelativeTo(null);
+        tdf.pack();
+    }//GEN-LAST:event_schedTableMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(StudentPortal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(StudentPortal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(StudentPortal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(StudentPortal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new StudentPortal().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JPanel EnrolledPanel;
+    public static javax.swing.JPanel NotEnrolledPanel;
+    private javax.swing.JPanel ValStudPanel;
+    private javax.swing.JLabel eBG;
+    private javax.swing.JButton eLogout;
+    public static javax.swing.JLabel eWelcomeUser;
+    private javax.swing.JLabel headTitle;
+    private javax.swing.JLabel headTitle1;
+    private javax.swing.JLabel headTitleHS;
+    private javax.swing.JLabel headTitleHS1;
+    public static javax.swing.JLabel hiddenTable;
+    public static javax.swing.JLabel hiddenUserPRI;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel lionBG;
+    private javax.swing.JLabel lionLogoSE;
+    private javax.swing.JLabel logo;
+    private javax.swing.JLabel logoEN;
+    private javax.swing.JPanel menubarHOME;
+    private javax.swing.JPanel menubarHOME1;
+    private javax.swing.JLabel neApology;
+    private javax.swing.JLabel neBG;
+    private javax.swing.JButton neEnrollBtn;
+    private javax.swing.JButton neLogout;
+    public static javax.swing.JLabel neWelcomeUser;
+    private javax.swing.JLabel numVal;
+    private javax.swing.JPanel schedPanel;
+    private javax.swing.JScrollPane schedScrollPane;
+    public static javax.swing.JTable schedTable;
+    public static javax.swing.JLabel secAdv;
+    public static javax.swing.JLabel secName;
+    public static javax.swing.JLabel secSY;
+    private javax.swing.JLabel titleNoS;
+    // End of variables declaration//GEN-END:variables
+}
